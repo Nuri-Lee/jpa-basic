@@ -18,18 +18,23 @@ public class JpaMain {
 
            Team team = new Team();
            team.setName("TeamA");
-           em.persist(team);    // id 에 값이 들어감 -> 영속상태가 되면 무조건 pk 값이 세팅됨
+           em.persist(team);
 
            Member member = new Member();
            member.setUsername("member1");
-           member.setTeamId(team.getId());
+           member.setTeam(team);
            em.persist(member);
 
-           Member findMember = em.find(Member.class, member.getId());
-           Long findTeamId = findMember.getTeamId();
-           Team teamId = em.find(Team.class, findTeamId);
+           em.flush();
+           em.clear();
 
-           // -> 객체지향스럽지 않은 방식식
+           // 양방향 관계 : Team -> Member, Member -> Team 으로 왔다갔다 하는 관계
+           Member findMember = em.find(Member.class, member.getId());
+           List<Member> members = findMember.getTeam().getMembers();
+
+           for (Member m : members){
+               System.out.println("m = " + m.getUsername());
+           }
 
           tx.commit();
        } catch (Exception e){

@@ -15,8 +15,9 @@ public class Member {
     @Column(name = "USERNAME")
     private String username;
 
-    @Column(name="TEAM_ID")
-    private Long teamId;
+    @ManyToOne  // member 입장에서 member 은 N 이고, Team 은 1 이기 때문이다.
+    @JoinColumn(name = "TEAM_ID")   // 조인하는 컬럼 매핑 = 관리한다는 뜻
+    private Team team;  // Member 클래스의 mappedBy 로 연결되어 있는 대상 = 연관관계의 주인
 
     public Long getId() {
         return id;
@@ -34,11 +35,11 @@ public class Member {
         this.username = username;
     }
 
-    public Long getTeamId() {
-        return teamId;
+    public Team getTeam() {
+        return team;
     }
 
-    public void setTeamId(Long teamId) {
-        this.teamId = teamId;
+    public void setTeam(Team team) {
+        this.team = team;
     }
 }
