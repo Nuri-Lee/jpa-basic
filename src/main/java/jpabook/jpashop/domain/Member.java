@@ -1,25 +1,25 @@
 package jpabook.jpashop.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Member {
 
     @Id
-    @GeneratedValue // (strategy = GenerationType.AUTO) :: 기본 값이 AUTO 이다.
+    @GeneratedValue
     @Column(name = "MEMBER_ID")
     private Long id;
     private String name;
     private String city;
     private String street;
     private String zipcode;
-
-    // set 을 만들게 되면 아무 데서나 setting 이 가능하기 때문에 코드 추적하기가 좋지 않다.
-    // -> 유지보수성이 떨어짐
-    // 가급적 생성자에서 값을 세팅하고, setter 의 사용을 최소화 하는 것이 유지보수성에 좋다.
+    // 여기에 orders 를 넣는 것은 좋은 설계가 아니다.
+    // 왜냐하면 ORDERS 테이블에 이미 MEMBER_ID (FK) 가 있기 때문에 이를 활용하는 것이 더 좋다.
+    // 그래도 예제니까 해보기
+    @OneToMany(mappedBy = "member") // 연관관게의 주인은 member
+    private List<Order> orders = new ArrayList<>();
 
     public Long getId() {
         return id;
